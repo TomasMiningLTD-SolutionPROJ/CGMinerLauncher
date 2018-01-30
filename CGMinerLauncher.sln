@@ -1,20 +1,31 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CGMinerLauncher", "CGMinerLauncher\CGMinerLauncher.csproj", "{22702F5D-7C5E-4C0D-8E40-CC3711E591F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{22702F5D-7C5E-4C0D-8E40-CC3711E591F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{22702F5D-7C5E-4C0D-8E40-CC3711E591F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22702F5D-7C5E-4C0D-8E40-CC3711E591F8}.Debug|x64.ActiveCfg = Debug|x64
+		{22702F5D-7C5E-4C0D-8E40-CC3711E591F8}.Debug|x64.Build.0 = Debug|x64
 		{22702F5D-7C5E-4C0D-8E40-CC3711E591F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22702F5D-7C5E-4C0D-8E40-CC3711E591F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22702F5D-7C5E-4C0D-8E40-CC3711E591F8}.Release|x64.ActiveCfg = Release|x64
+		{22702F5D-7C5E-4C0D-8E40-CC3711E591F8}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F40DC974-89B4-4C95-866B-76C75F379930}
 	EndGlobalSection
 EndGlobal
