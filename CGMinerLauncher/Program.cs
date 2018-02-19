@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Management;
 using System.Configuration;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace CGMinerLauncher
 {
     [Flags]
-    enum InternetConnectionState : int
+    internal enum InternetConnectionState : int
     {
         INTERNET_CONNECTION_MODEM = 0x1,
         INTERNET_CONNECTION_LAN = 0x2,
@@ -22,14 +17,12 @@ namespace CGMinerLauncher
         INTERNET_CONNECTION_CONFIGURED = 0x40
     }
 
-    class Program
+    internal class Program
     {
         [DllImport("WININET", CharSet = CharSet.Auto)]
-        static extern bool InternetGetConnectedState(ref InternetConnectionState lpdwFlags, int dwReserved);
+        private static extern bool InternetGetConnectedState(ref InternetConnectionState lpdwFlags, int dwReserved);
 
-        
-
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             string waitForMSIAfterburner = ConfigurationManager.AppSettings["WaitforMSIAfterburner"];
             if (string.Compare(waitForMSIAfterburner, "true", true) == 0)
@@ -39,13 +32,12 @@ namespace CGMinerLauncher
             if (string.Compare(waitForInternetConnection, "true", true) == 0)
                 WaitForInternetConnection();
 
-            int delayStart = 0;
-            if (int.TryParse(ConfigurationManager.AppSettings["DelayStart"], out delayStart))
+            if (int.TryParse(ConfigurationManager.AppSettings["DelayStart"], out int delayStart))
             {
                 Console.WriteLine("Delay Start " + delayStart);
                 Thread.Sleep(delayStart);
             }
-            
+
             Process process = StartCGMiner();
 
             //if (!IsAbleToConnect())
@@ -53,8 +45,6 @@ namespace CGMinerLauncher
             //    Restart();
             //    return;
             //}
-
-            //Thread th = MonitorCGMiner();
 
             process.WaitForExit();
             Restart();
@@ -73,71 +63,6 @@ namespace CGMinerLauncher
                     break;
                 }
                 Thread.Sleep(1000);
-            }
-        }
-
-        private static Thread MonitorCGMiner()
-        {
-            ThreadStart threadStart = new ThreadStart(MonitorAPI);
-            Thread th = new Thread(threadStart);
-            th.Start();
-            return th;
-        }
-
-        private static void MonitorAPI()
-        {
-            ApiWorker worker = new ApiWorker("127.0.0.1", 4028);
-            while (true)
-            {
-                Console.Clear();
-
-                Console.WriteLine(worker.Request("summary"));
-
-                Console.WriteLine(worker.Request("devs"));
-
-                Thread.Sleep(1000);
-            }
-        }
-
-        private static bool IsAbleToConnect()
-        {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
-            ApiWorker worker = new ApiWorker("127.0.0.1", 4028);
-
-            while (true)
-            {
-                string ret = worker.Request("summary");
-                if (ret != null)
-                    break;
-                if (sw.ElapsedMilliseconds > 60000)
-                    return false;
-                Thread.Sleep(1000);
-                Console.Write(".");
-            }
-            Console.WriteLine("");
-            return true;
-        }
-
-        private static void Parse(string data)
-        {
-            if (data != null)
-            {
-                string[] ary = data.Split('|');
-
-                foreach (string s in ary)
-                {
-                    if (s.Length > 0)
-                    {
-                        Console.WriteLine("---");
-                        string[] ary2 = s.Split(',');
-                        foreach (string s2 in ary2)
-                        {
-                            Console.WriteLine(s2);
-                        }
-                    }
-                }
             }
         }
 
@@ -161,11 +86,12 @@ namespace CGMinerLauncher
             string workingDirectory = ConfigurationManager.AppSettings["CGMinerWorkingDirectory"];
             string arguments = ConfigurationManager.AppSettings["CGMinerArguments"];
 
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-
-            startInfo.WorkingDirectory = workingDirectory;
-            startInfo.FileName = @"cgminer.exe";
-            startInfo.Arguments = arguments;
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                WorkingDirectory = workingDirectory,
+                FileName = @"cgminer.exe",
+                Arguments = arguments
+            };
             Process process = Process.Start(startInfo);
             return process;
         }

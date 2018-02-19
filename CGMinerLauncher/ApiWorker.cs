@@ -6,15 +6,14 @@ using System.Text;
 
 namespace CGMinerLauncher
 {
-    class ApiWorker
+    internal class ApiWorker
     {
         public string Host { get; private set; }
         public Int32 Port { get; private set; }
 
         public ApiWorker(string host, Int32 port)
         {
-            IPAddress ipAddress;
-            if(IPAddress.TryParse(host, out ipAddress) && port > 1023 && port < 65536)
+            if (IPAddress.TryParse(host, out IPAddress ipAddress) && port > 1023 && port < 65536)
             {
                 Host = host;
                 Port = port;
@@ -36,7 +35,6 @@ namespace CGMinerLauncher
                     {
                         using (var streamReader = new StreamReader(stream))
                         {
-
                             var cmdByte = Encoding.ASCII.GetBytes(cmd);
                             stream.Write(cmdByte, 0, cmdByte.Length);
 
@@ -48,13 +46,11 @@ namespace CGMinerLauncher
                     client.Close();
                 }
             }
-            catch 
+            catch
             {
-
             }
-            
+
             return res;
         }
-
     }
 }
